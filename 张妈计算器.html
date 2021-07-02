@@ -12,7 +12,7 @@
 		maximum-scale=1.0, 
 		user-scalable=no">
 	<body>					
-		<h1>Hello, 张琪瑛!</h1>
+		<h1>Hello, 张菖蒲!</h1>
 		<p id="selected" class="lead">点击按钮选择点数。</p>
 		<div class="container">
 			<div class="row">
@@ -87,7 +87,7 @@
 			function addNum(button){
 				if(nums.length==0){$("#selected").text("已选择："+button.innerHTML);}
 				else {$("#selected").append("、"+button.innerHTML);}
-				nums[nums.length]=numTransfer[button.innerHTML];
+				nums.push(numTransfer[button.innerHTML]);
 				clearDisplay();				
 				caculate();
 			};
@@ -99,6 +99,7 @@
 				clearDisplay();
 			};
 			
+			//清除显示
 			function clearDisplay(){
 				$("#result").text("");
 				$("#tabbody").empty("");			

@@ -15,30 +15,30 @@
 		user-scalable=no">
 	<body>					
 		<h1>Hello, 张菖蒲!</h1>
-		<p id="selected" class="lead">点击按钮选择点数。</p>
+		<p id="selected" class="lead">点击按钮选择点数。<span class="hidden-xs">或使用键盘输入，0代表10</span></p>
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12 col-md-4">
 					<div class="form-group"><div class="btn-group btn-group-justified">
-						<div id="btn1" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this)">1</button></div>
-						<div id="btn2" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this)">2</button></div>
-						<div id="btn3" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this)">3</button></div>
+						<div id="btn1" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this.innerHTML)">A</button></div>
+						<div id="btn2" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this.innerHTML)">2</button></div>
+						<div id="btn3" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this.innerHTML)">3</button></div>
 					</div></div>
 					<div class="form-group"><div class="btn-group btn-group-justified">
-						<div id="btn4" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this)">4</button></div>
-						<div id="btn5" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this)">5</button></div>
-						<div id="btn6" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this)">6</button></div>
+						<div id="btn4" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this.innerHTML)">4</button></div>
+						<div id="btn5" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this.innerHTML)">5</button></div>
+						<div id="btn6" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this.innerHTML)">6</button></div>
 					</div></div>
 					<div class="form-group"><div class="btn-group btn-group-justified">
-						<div id="btn7" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this)">7</button></div>
-						<div id="btn8" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this)">8</button></div>
-						<div id="btn9" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this)">9</button></div>
+						<div id="btn7" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this.innerHTML)">7</button></div>
+						<div id="btn8" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this.innerHTML)">8</button></div>
+						<div id="btn9" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this.innerHTML)">9</button></div>
 					</div></div>
 					<div class="form-group"><div class="btn-group btn-group-justified">
-						<div id="btn10" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this)">10</button></div>
-						<div id="btnJ" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this)">J</button></div>
-						<div id="btnQ" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this)">Q</button></div>
-						<div id="btnK" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this)">K</button></div>
+						<div id="btn10" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this.innerHTML)">10</button></div>
+						<div id="btnJ" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this.innerHTML)">J</button></div>
+						<div id="btnQ" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this.innerHTML)">Q</button></div>
+						<div id="btnK" class="btn-group"><button type="submit" class="btn btn-primary btn-block" onclick="addNum(this.innerHTML)">K</button></div>
 					</div></div>
 					<div class="form-group">
 						<div class="btn-group"><input id="btnAuto" type="checkbox" name="btnAuto" checked title="数量大于10会自动转为手动计算"/></div>
@@ -79,18 +79,13 @@
 		<script>
 			nums=new Array();
 			numGroup=new Array();
-			var numTransfer={1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,J:11,Q:12,K:13};
-			var pointTransfer={1:"1",2:"2",3:"3",4:"4",5:"5",6:"6",7:"7",8:"8",9:"9",10:"10",11:"J",12:"Q",13:"K"};
+			var numTransfer={1:1,A:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,J:11,Q:12,K:13};
+			var pointTransfer={1:"A",2:"2",3:"3",4:"4",5:"5",6:"6",7:"7",8:"8",9:"9",10:"10",11:"J",12:"Q",13:"K"};
+			var keyTransfer={1:1,A:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,0:10,J:"J",Q:"Q",K:"K"};
 			
-			$(function() {				
-				//防止刷新按钮连点功能
-				$(".btn").click(function(){
-					$(this).button('loading').delay(150).queue(function() {
-						$(this).button('reset');
-						$(this).dequeue(); 
-					});
-				});
-				$("#btnAuto").bootstrapSwitch({//初始化按钮
+			$(function() {
+				//初始化按钮
+				$("#btnAuto").bootstrapSwitch({
 					onText:"自动",
 					offText:"手动",
 					onColor:"primary",
@@ -103,14 +98,27 @@
 						   $("#btnCacu").show();
 						}
 					}
+				});				
+				//防止刷新按钮连点功能
+				$(".btn").click(function(){
+					$(this).button('loading').delay(150).queue(function() {
+						$(this).button('reset');
+						$(this).dequeue(); 
+					});
+				});
+				//监听键盘
+				$(document).keydown(function(event){
+					if(keyTransfer[String.fromCharCode(event.keyCode)]){
+						addNum(keyTransfer[String.fromCharCode(event.keyCode)]);
+					};
 				});
 			});
 			
 			//点击按钮后加入数字并重新计算
-			function addNum(button){
-				if(nums.length==0){$("#selected").text("已选择："+button.innerHTML);}
-				else {$("#selected").append("、"+button.innerHTML);}
-				nums.push(numTransfer[button.innerHTML]);
+			function addNum(numWord){
+				if(nums.length==0){$("#selected").text("已选择："+numWord);}
+				else {$("#selected").append("、"+numWord);}
+				nums.push(numTransfer[numWord]);
 				if(nums.length>10){$("#btnAuto").bootstrapSwitch('state',false);}
 				if($("#btnAuto")[0].checked==true){caculate();}
 			};

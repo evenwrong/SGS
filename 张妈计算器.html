@@ -15,7 +15,7 @@
 		user-scalable=no">
 	<body>					
 		<h1>Hello, 张菖蒲!</h1>
-		<p id="selected" class="lead">点击按钮选择点数。<span class="hidden-xs">或使用键盘输入，0代表10</span></p>
+		<p id="selected" class="lead">点击按钮选择点数。<span class="hidden-xs" title="0代表10">或使用键盘输入。</span></p>
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12 col-md-4">
@@ -81,7 +81,22 @@
 			numGroup=new Array();
 			var numTransfer={1:1,A:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,J:11,Q:12,K:13};
 			var pointTransfer={1:"A",2:"2",3:"3",4:"4",5:"5",6:"6",7:"7",8:"8",9:"9",10:"10",11:"J",12:"Q",13:"K"};
-			var keyTransfer={1:1,A:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,0:10,J:"J",Q:"Q",K:"K"};
+			var keyTransfer={
+				1:1,"A":1,"`":1,
+				2:2,"a":2,
+				3:3,"b":3,
+				4:4,"c":4,
+				5:5,"d":5,
+				6:6,"e":6,
+				7:7,"f":7,
+				8:8,"g":8,
+				9:9,"h":9,
+				0:10,"i":10,
+				"J":"J","o":"J",
+				"Q":"Q","j":"Q",
+				"K":"K","m":"K"
+			};
+			var clearFlag=false;
 			
 			$(function() {
 				//初始化按钮
@@ -108,9 +123,24 @@
 				});
 				//监听键盘
 				$(document).keydown(function(event){
-					if(keyTransfer[String.fromCharCode(event.keyCode)]){
-						addNum(keyTransfer[String.fromCharCode(event.keyCode)]);
-					};
+					if(event.keyCode==8 || event.keyCode==13){
+						if(clearFlag==true){
+							clearNum();
+							clearFlag=false;
+						}
+						else{
+							clearFlag=true;	
+							$(document).delay(600).queue(function(){
+								clearFlag=false;
+								$(document).dequeue(); 							
+							});
+						}
+					}
+					else{
+						if(keyTransfer[String.fromCharCode(event.keyCode)]){
+							addNum(keyTransfer[String.fromCharCode(event.keyCode)]);
+						}
+					}
 				});
 			});
 			
@@ -119,7 +149,7 @@
 				if(nums.length==0){$("#selected").text("已选择："+numWord);}
 				else {$("#selected").append("、"+numWord);}
 				nums.push(numTransfer[numWord]);
-				if(nums.length>10){$("#btnAuto").bootstrapSwitch('state',false);}
+				//if(nums.length>10){$("#btnAuto").bootstrapSwitch('state',false);}
 				if($("#btnAuto")[0].checked==true){caculate();}
 			};
 			
@@ -139,12 +169,13 @@
 			//分组计算
 			function caculate(){
 				clearDisplay();	
-				for(var i=1;i<(Math.pow(3,nums.length-1));i++){
+				resultNum=0;
+				for(var i=1;i<(Math.pow(3,nums.length)/2-1);i++){					
 					//分配点数在哪组
 					numGroup=new Array();
 					tempi=i;
 					sum=[0,0,0];//sum用于计算各组总和
-					str=["","",""];
+					str=["","",""];//str用于显示每组的数字
 					restcount=0;//用于计算剩下多少牌
 					for(var j=0;j<nums.length;j++){
 						numGroup[j]=tempi%3;
@@ -152,19 +183,21 @@
 						
 						sum[numGroup[j]]+=nums[j];//计算所属组的和
 						str[numGroup[j]]+=pointTransfer[nums[j]]+"、";//拼接最后显示的字符串
-						if(numGroup[j]==2){restcount++};
+						if(numGroup[j]==1){restcount++};
 					};
-					if(sum[0]==sum[1]){
+					if(sum[0]==sum[2]){
 						//去掉末尾逗号
 						str[0]=str[0].substr(0,str[0].length-1);
 						str[1]=str[1].substr(0,str[1].length-1);
+						str[2]=str[2].substr(0,str[2].length-1);
 						
 						$("#result").append("总和"+sum[0]+"：");
-						$("#result").append("("+str[1]+")");
+						$("#result").append("("+str[2]+")");
 						$("#result").append("("+str[0]+")<br/>");
 						
-						$("#tabbody").append("<tr><td>"+sum[0]+"</td><td>"+str[1]+"</td><td>"+str[0]+"</td><td class=\"hidden-xs\">"+restcount+"</td></tr>");
-					}
+						$("#tabbody").append("<tr><td>"+sum[0]+"</td><td>"+str[2]+"</td><td>"+str[0]+"</td><td class=\"hidden-xs\">"+restcount+"</td></tr>");
+						if(++resultNum>10){break;}
+					}					
 				}
 			};
 		</script>

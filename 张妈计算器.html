@@ -50,7 +50,7 @@
 						<div class="btn-group">
 							<button id="clear" type="submit" class="btn btn-danger btn-lg btn-block" style="text-shadow: black 5px 3px 3px;"
 								onclick="clearNum()">
-								<span class="glyphicon glyphicon-refresh"></span> やり直す
+								<span class="glyphicon glyphicon-refresh"></span> 重置
 							</button>
 						</div>
 					</div></div>
@@ -82,24 +82,24 @@
 			var numTransfer={1:1,A:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,J:11,Q:12,K:13};
 			var pointTransfer={1:"A",2:"2",3:"3",4:"4",5:"5",6:"6",7:"7",8:"8",9:"9",10:"10",11:"J",12:"Q",13:"K"};
 			var keyTransfer={
-				1:1,"A":1,"`":1,
-				2:2,"a":2,
-				3:3,"b":3,
-				4:4,"c":4,
-				5:5,"d":5,
-				6:6,"e":6,
-				7:7,"f":7,
-				8:8,"g":8,
-				9:9,"h":9,
-				0:10,"i":10,
-				"J":"J","o":"J",
-				"Q":"Q","j":"Q",
-				"K":"K","m":"K"
+				1:1,"A":1,"a":1,49:1,
+				2:2,"b":2,50:2,
+				3:3,"c":3,51:3,
+				4:4,"d":4,52:4,
+				5:5,"e":5,53:5,
+				6:6,"f":6,54:6,
+				7:7,"g":7,55:7,
+				8:8,"h":8,56:8,
+				9:9,"i":9,57:9,
+				0:10,"`":10,48:10,
+				"J":"J","o":"J",74:"J",
+				"Q":"Q","j":"Q",81:"Q",
+				"K":"K","m":"K",75:"K"
 			};
 			var clearFlag=false;
 			
 			$(function() {
-				//初始化按钮
+				//初始化自动按钮
 				$("#btnAuto").bootstrapSwitch({
 					onText:"自动",
 					offText:"手动",
@@ -123,14 +123,15 @@
 				});
 				//监听键盘
 				$(document).keydown(function(event){
-					if(event.keyCode==8 || event.keyCode==13){
+					//alert(event.keyCode);
+					if(event.keyCode==8 || event.keyCode==13){//双击退格键及回车
 						if(clearFlag==true){
-							clearNum();
+							clearNum();//则清除所有数字
 							clearFlag=false;
 						}
 						else{
 							clearFlag=true;	
-							$(document).delay(600).queue(function(){
+							$(document).delay(600).queue(function(){//双击间隔不超过600毫秒
 								clearFlag=false;
 								$(document).dequeue(); 							
 							});
@@ -178,6 +179,7 @@
 					str=["","",""];//str用于显示每组的数字
 					restcount=0;//用于计算剩下多少牌
 					for(var j=0;j<nums.length;j++){
+						//转成三进制数
 						numGroup[j]=tempi%3;
 						tempi=parseInt(tempi/3);
 						

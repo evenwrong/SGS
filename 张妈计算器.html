@@ -97,6 +97,7 @@
 				"K":"K","m":"K",75:"K"
 			};
 			var clearFlag=false;
+			var lastClickTime=0;
 			
 			$(function() {
 				//初始化自动按钮
@@ -147,6 +148,11 @@
 			
 			//点击按钮后加入数字并重新计算
 			function addNum(numWord){
+				//若超过一分钟没有按键，下次按键时会自动清除之前的所有数字，以避免上次计算后忘记清除的情况
+				nowClickTime=Date.now();
+				if((nowClickTime-lastClickTime)>60000){clearNum();}
+				lastClickTime=nowClickTime;
+				
 				if(nums.length==0){$("#selected").text("已选择："+numWord);}
 				else {$("#selected").append("、"+numWord);}
 				nums.push(numTransfer[numWord]);
